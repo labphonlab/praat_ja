@@ -11,15 +11,6 @@ on:
       - 'v*'
   workflow_dispatch:
 
-env:
-  # 新リポジトリ labphonlab/praat_ja に移行後は "." にする。
-  # サブディレクトリ構成（現 praat_open リポジトリ）では "praat_ja"。
-  PROJECT_DIR: praat_ja
-
-defaults:
-  run:
-    working-directory: ${{ github.workspace }}
-
 jobs:
   build-mac:
     runs-on: macos-14
