@@ -27,7 +27,7 @@ from app.platform_utils import get_app_data_dir, get_platform_key
 # Praat の新リリースは API 経由で自動取得されるため、ここを更新しなくても
 # 最新版が落ちる。これはあくまでオフライン/API障害時の保険。
 # ----------------------------------------------------------------------
-PRAAT_VERSION_FALLBACK = "6.4.65"
+PRAAT_VERSION_FALLBACK = "6.4.67"
 PRAAT_VERSION = PRAAT_VERSION_FALLBACK  # 後方互換のため公開
 
 # 公式 Praat のリポジトリ。バイナリリリースはこちらに置かれている。
