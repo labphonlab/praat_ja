@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>非公式Praat日本語版 (Praat JA - Unofficial) — ダウンロード</title>
+<meta name="description" content="Praat の非公式日本語GUIフロントエンド。macOS / Windows 用のインストーラーを公式リポジトリから無料でダウンロードできます。">
+<link rel="alternate" hreflang="ja" href="../ja/">
+<link rel="alternate" hreflang="en" href="../en/">
+<link rel="alternate" hreflang="x-default" href="../">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-lang="ja">
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="./">
+      <span class="brand-logo">P</span>
+      <span class="brand-text">Praat <span class="brand-jp">JA</span> <span class="badge-unofficial">非公式</span></span>
+    </a>
+    <nav class="site-nav">
+      <a href="#download">ダウンロード</a>
+      <a href="#about">概要</a>
+      <a href="#features">機能</a>
+      <a href="#license">ライセンス</a>
+      <a href="https://github.com/labphonlab/praat_ja" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+    <div class="lang-switch" role="group" aria-label="言語切り替え">
+      <a class="lang-btn active" href="../ja/" hreflang="ja" lang="ja" aria-current="page">日本語</a>
+      <a class="lang-btn" href="../en/" hreflang="en" lang="en">English</a>
+    </div>
+  </div>
+</header>
+
+<div class="notice-bar">
+  <div class="container">
+    ⚠️ 本サイトは <b>非公式</b> Praat日本語フロントエンドの配布ページです。
+    公式 Praat プロジェクトとは無関係です。Praat 公式サイトは
+    <a href="https://praat.org" target="_blank" rel="noopener">praat.org</a> です。
+  </div>
+</div>
+
+<main>
+
+<section class="hero">
+  <div class="container hero-inner">
+    <h1>非公式Praat日本語版</h1>
+    <p class="tagline">音声分析ソフト Praat を、日本語のGUIで手軽に。</p>
+    <p class="lead">
+      Praatの新リリースが出ても、本アプリ側を更新せずに<b>常に最新版</b>を取得できます。<br>
+      フロントエンド本体も自動更新通知に対応しています。
+    </p>
+    <div class="hero-buttons">
+      <a id="primary-download" class="btn btn-primary" href="#download">ダウンロードへ</a>
+      <a class="btn btn-ghost" href="https://github.com/labphonlab/praat_ja" target="_blank" rel="noopener">
+        ソースコード（GitHub）
+      </a>
+    </div>
+    <p id="detected-os" class="detected-os"></p>
+  </div>
+</section>
+
+<section id="download" class="section">
+  <div class="container">
+    <h2>ダウンロード</h2>
+    <p class="muted">
+      本アプリ最新版: <span id="latest-version">確認中...</span>
+      （<a id="release-page-link" href="https://github.com/labphonlab/praat_ja/releases/latest" target="_blank" rel="noopener">リリースページ</a>）<br>
+      Praat 本体最新版: <span id="latest-praat-version">確認中...</span>
+      （初回起動時に自動取得 / アプリ内アップデート機能あり）
+    </p>
+
+    <div class="download-grid">
+      <article class="dl-card" id="card-mac">
+        <div class="dl-icon">🍎</div>
+        <h3>macOS</h3>
+        <p class="dl-meta">.dmg インストーラー / Intel・Apple Silicon 対応</p>
+        <a id="dl-mac" class="btn btn-primary" href="https://github.com/labphonlab/praat_ja/releases/latest" target="_blank" rel="noopener">
+          macOS版をダウンロード
+        </a>
+        <details>
+          <summary>インストール手順</summary>
+          <ol>
+            <li>DMG を開き、非公式Praat日本語版.app を Applications フォルダへドラッグ</li>
+            <li>初回起動時は右クリック →「開く」で許可</li>
+            <li>セットアップ画面で「自動ダウンロード」を選択（Praat最新版を取得）</li>
+          </ol>
+        </details>
+      </article>
+
+      <article class="dl-card" id="card-win">
+        <div class="dl-icon">🪟</div>
+        <h3>Windows</h3>
+        <p class="dl-meta">セットアップ実行ファイル / Intel64・ARM64 対応</p>
+        <a id="dl-win" class="btn btn-primary" href="https://github.com/labphonlab/praat_ja/releases/latest" target="_blank" rel="noopener">
+          Windows版をダウンロード
+        </a>
+        <details>
+          <summary>インストール手順</summary>
+          <ol>
+            <li>PraatJa_Setup.exe を実行</li>
+            <li>SmartScreen 警告が出たら「詳細情報」→「実行」</li>
+            <li>セットアップ画面で「自動ダウンロード」を選択</li>
+          </ol>
+        </details>
+      </article>
+
+      <article class="dl-card" id="card-src">
+        <div class="dl-icon">⚙️</div>
+        <h3>ソースから実行</h3>
+        <p class="dl-meta">Linux / その他の環境向け</p>
+        <a class="btn btn-ghost" href="https://github.com/labphonlab/praat_ja/tree/main" target="_blank" rel="noopener">
+          GitHubで見る
+        </a>
+        <details>
+          <summary>実行手順</summary>
+          <pre><code>git clone https://github.com/labphonlab/praat_ja.git
+cd praat_ja
+pip install -r requirements-dev.txt
+python main.py</code></pre>
+        </details>
+      </article>
+    </div>
+
+    <p class="muted small">
+      ※ ダウンロードリンクは GitHub Releases から直接配信されます。
+      Praat 本体（GPL v3）は同梱せず、初回起動時に
+      <a href="https://github.com/praat/praat.github.io" target="_blank" rel="noopener">公式リポジトリ</a>から自動取得します。
+    </p>
+  </div>
+</section>
+
+<section id="about" class="section section-alt">
+  <div class="container">
+    <h2>このアプリについて</h2>
+    <p>
+      <strong>非公式Praat日本語版 (Praat JA - Unofficial)</strong> は、音声分析ソフトウェア
+      <a href="https://praat.org" target="_blank" rel="noopener">Praat</a> を
+      日本語のグラフィカルUIから操作できるようにする<b>非公式</b>フロントエンドアプリです。
+    </p>
+    <p>
+      Praat 本体は Paul Boersma・David Weenink（アムステルダム大学）が GPL v3 で開発・配布しています。
+      本アプリは Praat を <b>同梱せず</b>、初回起動時に公式GitHubから<b>最新版</b>を自動ダウンロードして
+      ユーザーのアプリケーションデータ領域に配置します。
+    </p>
+    <p class="warning">
+      ⚠️ 本プロジェクトは公式 Praat プロジェクトとは <b>無関係</b> です。
+      公式の承認・推奨を受けたものではありません。
+    </p>
+  </div>
+</section>
+
+<section id="features" class="section">
+  <div class="container">
+    <h2>機能</h2>
+    <div class="feature-grid">
+      <div class="feature">
+        <h3>🇯🇵 日本語UI</h3>
+        <p>メニュー・ダイアログ・エラーメッセージすべて日本語。</p>
+      </div>
+      <div class="feature">
+        <h3>⬇️ ワンクリック導入</h3>
+        <p>初回起動時に Praat 本体（最新版）を自動ダウンロード・配置。</p>
+      </div>
+      <div class="feature">
+        <h3>🔄 時差ゼロ追従</h3>
+        <p>本アプリを更新しなくても、Praat の新リリースが出れば次回DLで自動取得されます。</p>
+      </div>
+      <div class="feature">
+        <h3>♻️ 完全自動アップデート</h3>
+        <p>本アプリ自身も新版が出れば起動時に通知。ワンクリックでDLページへ。</p>
+      </div>
+      <div class="feature">
+        <h3>🎚 主要スクリプト同梱</h3>
+        <p>波形 / スペクトログラム / ピッチ / フォルマント / TextGrid 作成 / 区間抽出。</p>
+      </div>
+      <div class="feature">
+        <h3>📝 オープンソース</h3>
+        <p>フロントエンドは MIT License、Praat 本体は GPL v3。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="license" class="section section-alt">
+  <div class="container">
+    <h2>ライセンス</h2>
+    <ul>
+      <li>
+        <strong>本フロントエンド</strong>: MIT License
+        （<a href="https://github.com/labphonlab/praat_ja/blob/main/LICENSE" target="_blank" rel="noopener">LICENSE</a>）
+      </li>
+      <li>
+        <strong>Praat 本体</strong>: GPL v3+（同梱せず、初回起動時に
+        <a href="https://github.com/praat/praat.github.io" target="_blank" rel="noopener">公式リポジトリ</a>から取得）
+        — GPL v3 全文は
+        <a href="https://github.com/labphonlab/praat_ja/blob/main/COPYING.GPL" target="_blank" rel="noopener">COPYING.GPL</a> に同梱
+      </li>
+    </ul>
+    <p>
+      参考:
+      <a href="https://praat.org" target="_blank" rel="noopener">Praat 公式サイト</a> /
+      <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GPL v3 全文</a>
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <p>&copy; labphonlab — 非公式Praat日本語版 (Praat JA - Unofficial)</p>
+    <p>
+      <a href="https://github.com/labphonlab/praat_ja" target="_blank" rel="noopener">GitHub</a> ·
+      <a href="https://github.com/labphonlab/praat_ja/issues" target="_blank" rel="noopener">Issue</a> ·
+      <a href="https://praat.org" target="_blank" rel="noopener">Praat 公式</a>
+    </p>
+  </div>
+</footer>
+
+<script src="../app.js"></script>
+</body>
+</html>

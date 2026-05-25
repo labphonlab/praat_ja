@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Praat JA (Unofficial) — Choose your language / 言語を選択</title>
+<meta name="description" content="Unofficial Japanese frontend for Praat — choose your language.">
+<link rel="alternate" hreflang="ja" href="./ja/">
+<link rel="alternate" hreflang="en" href="./en/">
+<link rel="alternate" hreflang="x-default" href="./">
+<link rel="stylesheet" href="style.css">
+<script>
+(function () {
+  // ブラウザ言語に基づき自動リダイレクト。?lang=ja|en で固定可。
+  // localStorage に過去の選択があればそれを優先する。
+  try {
+    var url = new URL(window.location.href);
+    var explicit = url.searchParams.get("lang");
+    var stored = null;
+    try { stored = localStorage.getItem("praatja_lang"); } catch (_) {}
+    var pick = explicit || stored;
+    if (!pick) {
+      var langs = navigator.languages || [navigator.language || "en"];
+      pick = "en";
+      for (var i = 0; i < langs.length; i++) {
+        var l = (langs[i] || "").toLowerCase();
+        if (l.indexOf("ja") === 0) { pick = "ja"; break; }
+        if (l.indexOf("en") === 0) { pick = "en"; break; }
+      }
+    }
+    if (pick === "ja" || pick === "en") {
+      try { localStorage.setItem("praatja_lang", pick); } catch (_) {}
+      window.location.replace("./" + pick + "/");
+    }
+  } catch (_) { /* fallthrough to manual links */ }
+})();
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="./">
+      <span class="brand-logo">P</span>
+      <span class="brand-text">Praat <span class="brand-jp">JA</span></span>
+    </a>
+  </div>
+</header>
+
+<main class="hero">
+  <div class="container hero-inner">
+    <h1>Praat JA (Unofficial)</h1>
+    <p class="tagline">Choose your language / 言語を選択してください</p>
+    <div class="hero-buttons" style="margin-top: 28px;">
+      <a class="btn btn-primary" href="./ja/">🇯🇵 日本語</a>
+      <a class="btn btn-primary" href="./en/">🇬🇧 English</a>
+    </div>
+    <p class="lead" style="margin-top: 36px;">
+      Unofficial Japanese GUI frontend for <a href="https://praat.org" target="_blank" rel="noopener">Praat</a>.
+      Not affiliated with the official Praat project.
+    </p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <p>&copy; labphonlab — Praat JA (Unofficial)</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,159 @@
+name: Watch Praat upstream & auto-release
+
+# Praat の新リリースを監視し、新しいバージョンが出ていたら
+# フロントエンド (praat_ja) の新しいタグを自動的に作成する。
+# 作成されたタグに対しては praat_ja/.github/workflows/build.yml が動き、
+# macOS / Windows 用のインストーラーがビルド & 公開される。
+
+on:
+  schedule:
+    # 6時間ごとにチェック
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      force_version:
+        description: '強制リリースするフロントエンドのバージョン (例: 1.0.5)'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  check-and-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install requests
+        run: pip install requests
+
+      - name: Determine next frontend tag
+        id: decide
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FORCE_VERSION: ${{ inputs.force_version }}
+        run: |
+          python3 <<'PY'
+          import json, os, subprocess, sys
+          import requests
+
+          force = os.environ.get("FORCE_VERSION", "").strip()
+          praat = requests.get(
+              "https://api.github.com/repos/praat/praat.github.io/releases/latest",
+              headers={"Accept": "application/vnd.github+json"},
+              timeout=30,
+          ).json()
+          praat_tag = str(praat.get("tag_name", "")).lstrip("v").strip()
+          if not praat_tag:
+              print("::error::Could not read latest Praat version")
+              sys.exit(1)
+          print(f"Latest Praat: v{praat_tag}")
+
+          frontend = requests.get(
+              "https://api.github.com/repos/labphonlab/praat_ja/releases/latest",
+              headers={"Accept": "application/vnd.github+json"},
+              timeout=30,
+          )
+          if frontend.status_code == 404:
+              last_frontend = ""
+              last_praat = ""
+          else:
+              data = frontend.json()
+              last_frontend = str(data.get("tag_name", "")).lstrip("v").strip()
+              body = str(data.get("body", ""))
+              last_praat = ""
+              for line in body.splitlines():
+                  if line.lower().startswith("praat-version:"):
+                      last_praat = line.split(":", 1)[1].strip()
+                      break
+          print(f"Last frontend: v{last_frontend or '(none)'} (Praat-version recorded: {last_praat or '?'})")
+
+          should_release = False
+          if force:
+              new_tag = force
+              should_release = True
+              reason = f"manual force release {force}"
+          elif not last_frontend:
+              # 初回リリース
+              new_tag = "1.0.0"
+              should_release = True
+              reason = "initial release"
+          elif last_praat != praat_tag:
+              # Praatが新しくなった → patchを1つ上げる
+              parts = last_frontend.split(".")
+              while len(parts) < 3:
+                  parts.append("0")
+              parts[2] = str(int(parts[2]) + 1)
+              new_tag = ".".join(parts[:3])
+              should_release = True
+              reason = f"Praat updated {last_praat or '?'} -> {praat_tag}"
+          else:
+              new_tag = last_frontend
+              reason = "no upstream change"
+
+          print(f"Decision: should_release={should_release}, new_tag=v{new_tag}, reason={reason}")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"should_release={'true' if should_release else 'false'}\n")
+              f.write(f"new_tag={new_tag}\n")
+              f.write(f"praat_tag={praat_tag}\n")
+              f.write(f"reason={reason}\n")
+          PY
+
+      - name: Update frontend version constant
+        if: steps.decide.outputs.should_release == 'true'
+        run: |
+          python3 <<'PY'
+          import os, re
+          from pathlib import Path
+
+          # praat_ja/ サブディレクトリ構成（praat_open リポジトリ）か、
+          # フラット構成（praat_ja リポジトリ）かを自動判定する。
+          base = Path("praat_ja") if Path("praat_ja/app/__init__.py").exists() else Path(".")
+          init = base / "app" / "__init__.py"
+          installer = base / "app" / "praat_installer.py"
+
+          new = os.environ["NEW_TAG"]
+          praat = os.environ["PRAAT_TAG"]
+
+          src = init.read_text()
+          src = re.sub(r'__version__\s*=\s*".*"', f'__version__ = "{new}"', src)
+          init.write_text(src)
+
+          isrc = installer.read_text()
+          isrc = re.sub(r'PRAAT_VERSION_FALLBACK\s*=\s*".*"', f'PRAAT_VERSION_FALLBACK = "{praat}"', isrc)
+          installer.write_text(isrc)
+
+          # bumped paths を後続ステップに渡す
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"init_path={init}\n")
+              f.write(f"installer_path={installer}\n")
+          PY
+        id: bump
+        env:
+          NEW_TAG: ${{ steps.decide.outputs.new_tag }}
+          PRAAT_TAG: ${{ steps.decide.outputs.praat_tag }}
+
+      - name: Commit, tag and push
+        if: steps.decide.outputs.should_release == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "${{ steps.bump.outputs.init_path }}" "${{ steps.bump.outputs.installer_path }}"
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: bump to v${{ steps.decide.outputs.new_tag }} (Praat v${{ steps.decide.outputs.praat_tag }})"
+            git push origin HEAD
+          fi
+          git tag -a "v${{ steps.decide.outputs.new_tag }}" -m "Auto release: ${{ steps.decide.outputs.reason }}
+
+          Praat-Version: ${{ steps.decide.outputs.praat_tag }}
+          "
+          git push origin "v${{ steps.decide.outputs.new_tag }}"

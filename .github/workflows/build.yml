@@ -1,0 +1,98 @@
+name: Build & Release
+
+# このワークフローは、リポジトリのルートが praat_ja プロジェクト直下
+# （main.py / app/ / build/ がルートにある構成）でも、現状のように
+# praat_ja/ サブディレクトリにある構成でも動作する。
+# 環境変数 PROJECT_DIR で切り替える。
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+env:
+  # 新リポジトリ labphonlab/praat_ja に移行後は "." にする。
+  # サブディレクトリ構成（現 praat_open リポジトリ）では "praat_ja"。
+  PROJECT_DIR: praat_ja
+
+defaults:
+  run:
+    working-directory: ${{ github.workspace }}
+
+jobs:
+  build-mac:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Detect project dir
+        id: pd
+        shell: bash
+        run: |
+          if [ -f "main.py" ] && [ -d "app" ]; then
+            echo "dir=." >> "$GITHUB_OUTPUT"
+          else
+            echo "dir=praat_ja" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Install dependencies
+        working-directory: ${{ steps.pd.outputs.dir }}
+        run: pip install -r requirements-dev.txt
+      - name: Build with PyInstaller
+        working-directory: ${{ steps.pd.outputs.dir }}
+        run: pyinstaller build/praat_ja.spec --clean
+      - name: Install create-dmg
+        run: brew install create-dmg
+      - name: Create DMG
+        working-directory: ${{ steps.pd.outputs.dir }}
+        run: bash build/build_mac.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: praat-ja-mac
+          path: ${{ steps.pd.outputs.dir }}/dist/非公式Praat日本語版.dmg
+
+  build-win:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Detect project dir
+        id: pd
+        shell: bash
+        run: |
+          if [ -f "main.py" ] && [ -d "app" ]; then
+            echo "dir=." >> "$GITHUB_OUTPUT"
+          else
+            echo "dir=praat_ja" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Install dependencies
+        working-directory: ${{ steps.pd.outputs.dir }}
+        run: pip install -r requirements-dev.txt
+      - name: Build with PyInstaller
+        working-directory: ${{ steps.pd.outputs.dir }}
+        run: pyinstaller build/praat_ja.spec --clean
+      - name: Install Inno Setup
+        run: choco install innosetup -y
+      - name: Build installer
+        working-directory: ${{ steps.pd.outputs.dir }}
+        run: iscc build/installer.iss
+      - uses: actions/upload-artifact@v4
+        with:
+          name: praat-ja-win
+          path: ${{ steps.pd.outputs.dir }}/dist/PraatJa_Setup.exe
+
+  release:
+    needs: [build-mac, build-win]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/download-artifact@v4
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            praat-ja-mac/非公式Praat日本語版.dmg
+            praat-ja-win/PraatJa_Setup.exe

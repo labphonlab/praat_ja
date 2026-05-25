@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Praat JA — Unofficial Japanese GUI Frontend for Praat</title>
+<meta name="description" content="An unofficial Japanese GUI frontend for Praat. Free installers for macOS and Windows, with fully automatic Praat updates.">
+<link rel="alternate" hreflang="ja" href="../ja/">
+<link rel="alternate" hreflang="en" href="../en/">
+<link rel="alternate" hreflang="x-default" href="../">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-lang="en">
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="./">
+      <span class="brand-logo">P</span>
+      <span class="brand-text">Praat <span class="brand-jp">JA</span> <span class="badge-unofficial">Unofficial</span></span>
+    </a>
+    <nav class="site-nav">
+      <a href="#download">Download</a>
+      <a href="#about">About</a>
+      <a href="#features">Features</a>
+      <a href="#license">License</a>
+      <a href="https://github.com/labphonlab/praat_ja" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+    <div class="lang-switch" role="group" aria-label="Language switcher">
+      <a class="lang-btn" href="../ja/" hreflang="ja" lang="ja">日本語</a>
+      <a class="lang-btn active" href="../en/" hreflang="en" lang="en" aria-current="page">English</a>
+    </div>
+  </div>
+</header>
+
+<div class="notice-bar">
+  <div class="container">
+    ⚠️ This is the distribution page for an <b>UNOFFICIAL</b> Japanese frontend for Praat.
+    It is NOT affiliated with the official Praat project. The official Praat site is
+    <a href="https://praat.org" target="_blank" rel="noopener">praat.org</a>.
+  </div>
+</div>
+
+<main>
+
+<section class="hero">
+  <div class="container hero-inner">
+    <h1>Praat JA — Unofficial Japanese Frontend</h1>
+    <p class="tagline">A friendly Japanese GUI for the Praat phonetics software.</p>
+    <p class="lead">
+      Always fetches the <b>latest</b> Praat release from the official GitHub, with
+      <b>zero time lag</b> — no need to update this app when Praat ships a new version.<br>
+      The frontend itself supports in-app update notifications.
+    </p>
+    <div class="hero-buttons">
+      <a id="primary-download" class="btn btn-primary" href="#download">Go to download</a>
+      <a class="btn btn-ghost" href="https://github.com/labphonlab/praat_ja" target="_blank" rel="noopener">
+        Source code (GitHub)
+      </a>
+    </div>
+    <p id="detected-os" class="detected-os"></p>
+  </div>
+</section>
+
+<section id="download" class="section">
+  <div class="container">
+    <h2>Download</h2>
+    <p class="muted">
+      Latest frontend: <span id="latest-version">checking...</span>
+      (<a id="release-page-link" href="https://github.com/labphonlab/praat_ja/releases/latest" target="_blank" rel="noopener">Release page</a>)<br>
+      Latest Praat: <span id="latest-praat-version">checking...</span>
+      (auto-installed on first launch / in-app updater)
+    </p>
+
+    <div class="download-grid">
+      <article class="dl-card" id="card-mac">
+        <div class="dl-icon">🍎</div>
+        <h3>macOS</h3>
+        <p class="dl-meta">.dmg installer / Intel &amp; Apple Silicon</p>
+        <a id="dl-mac" class="btn btn-primary" href="https://github.com/labphonlab/praat_ja/releases/latest" target="_blank" rel="noopener">
+          Download for macOS
+        </a>
+        <details>
+          <summary>Install instructions</summary>
+          <ol>
+            <li>Open the DMG and drag the .app into Applications</li>
+            <li>On first launch, right-click → "Open" to allow the app</li>
+            <li>In the setup screen, choose "Auto-download" to fetch the latest Praat</li>
+          </ol>
+        </details>
+      </article>
+
+      <article class="dl-card" id="card-win">
+        <div class="dl-icon">🪟</div>
+        <h3>Windows</h3>
+        <p class="dl-meta">Setup executable / Intel64 &amp; ARM64</p>
+        <a id="dl-win" class="btn btn-primary" href="https://github.com/labphonlab/praat_ja/releases/latest" target="_blank" rel="noopener">
+          Download for Windows
+        </a>
+        <details>
+          <summary>Install instructions</summary>
+          <ol>
+            <li>Run PraatJa_Setup.exe</li>
+            <li>If SmartScreen warns you, click "More info" → "Run anyway"</li>
+            <li>In the setup screen, choose "Auto-download"</li>
+          </ol>
+        </details>
+      </article>
+
+      <article class="dl-card" id="card-src">
+        <div class="dl-icon">⚙️</div>
+        <h3>Run from source</h3>
+        <p class="dl-meta">Linux / other platforms</p>
+        <a class="btn btn-ghost" href="https://github.com/labphonlab/praat_ja/tree/main" target="_blank" rel="noopener">
+          View on GitHub
+        </a>
+        <details>
+          <summary>How to run</summary>
+          <pre><code>git clone https://github.com/labphonlab/praat_ja.git
+cd praat_ja
+pip install -r requirements-dev.txt
+python main.py</code></pre>
+        </details>
+      </article>
+    </div>
+
+    <p class="muted small">
+      Downloads are served directly from GitHub Releases. Praat itself (GPL v3) is
+      <b>not bundled</b> — the app fetches it from the
+      <a href="https://github.com/praat/praat.github.io" target="_blank" rel="noopener">official repository</a>
+      on first launch.
+    </p>
+  </div>
+</section>
+
+<section id="about" class="section section-alt">
+  <div class="container">
+    <h2>About</h2>
+    <p>
+      <strong>Praat JA (Unofficial)</strong> is an <b>unofficial</b> Japanese GUI frontend
+      for the phonetics software <a href="https://praat.org" target="_blank" rel="noopener">Praat</a>.
+    </p>
+    <p>
+      Praat is developed by Paul Boersma and David Weenink (University of Amsterdam)
+      and distributed under the GNU GPL v3. This app does <b>not bundle</b> Praat —
+      on first launch it downloads the <b>latest</b> official binary from GitHub
+      into the user's local application data directory.
+    </p>
+    <p class="warning">
+      ⚠️ This project is <b>NOT affiliated</b> with the official Praat project, and has
+      not received any endorsement from it.
+    </p>
+  </div>
+</section>
+
+<section id="features" class="section">
+  <div class="container">
+    <h2>Features</h2>
+    <div class="feature-grid">
+      <div class="feature">
+        <h3>🇯🇵 Japanese UI</h3>
+        <p>Menus, dialogs and error messages all in Japanese.</p>
+      </div>
+      <div class="feature">
+        <h3>⬇️ One-click setup</h3>
+        <p>Praat (latest) is auto-downloaded and placed on first launch.</p>
+      </div>
+      <div class="feature">
+        <h3>🔄 Zero-lag updates</h3>
+        <p>Even without updating this app, the next download fetches the newest Praat.</p>
+      </div>
+      <div class="feature">
+        <h3>♻️ Fully automatic updates</h3>
+        <p>The frontend itself notifies you of new releases at startup.</p>
+      </div>
+      <div class="feature">
+        <h3>🎚 Useful scripts bundled</h3>
+        <p>Waveform / spectrogram / pitch / formant / TextGrid / segment extraction.</p>
+      </div>
+      <div class="feature">
+        <h3>📝 Open source</h3>
+        <p>Frontend under MIT License; Praat itself under GPL v3.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="license" class="section section-alt">
+  <div class="container">
+    <h2>License</h2>
+    <ul>
+      <li>
+        <strong>This frontend</strong>: MIT License
+        (<a href="https://github.com/labphonlab/praat_ja/blob/main/LICENSE" target="_blank" rel="noopener">LICENSE</a>)
+      </li>
+      <li>
+        <strong>Praat itself</strong>: GPL v3+ (not bundled; fetched from the
+        <a href="https://github.com/praat/praat.github.io" target="_blank" rel="noopener">official repo</a>
+        on first launch). The full GPL v3 text is shipped as
+        <a href="https://github.com/labphonlab/praat_ja/blob/main/COPYING.GPL" target="_blank" rel="noopener">COPYING.GPL</a>.
+      </li>
+    </ul>
+    <p>
+      See also:
+      <a href="https://praat.org" target="_blank" rel="noopener">Praat official site</a> /
+      <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GPL v3 full text</a>
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <p>&copy; labphonlab — Praat JA (Unofficial Japanese Frontend for Praat)</p>
+    <p>
+      <a href="https://github.com/labphonlab/praat_ja" target="_blank" rel="noopener">GitHub</a> ·
+      <a href="https://github.com/labphonlab/praat_ja/issues" target="_blank" rel="noopener">Issues</a> ·
+      <a href="https://praat.org" target="_blank" rel="noopener">Praat official</a>
+    </p>
+  </div>
+</footer>
+
+<script src="../app.js"></script>
+</body>
+</html>
