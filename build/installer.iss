@@ -20,7 +20,10 @@ DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=..\dist
 OutputBaseFilename=PraatJa_Setup
+; アイコンは置かれているときだけ使う。無ければデフォルト。
+#if FileExists("..\assets\icon.ico")
 SetupIconFile=..\assets\icon.ico
+#endif
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern

@@ -1,11 +1,12 @@
 :root {
-  --color-primary: #c8102e;
-  --color-primary-dark: #8c0a20;
+  --color-primary: #4ab3df;
+  --color-primary-dark: #2f8db5;
+  --color-accent-soft: #e6f4fb;
   --color-bg: #ffffff;
-  --color-bg-alt: #f5f5f0;
-  --color-text: #1c1c1c;
-  --color-muted: #6a6a6a;
-  --color-border: #e0e0d8;
+  --color-bg-alt: #f3f9fc;
+  --color-text: #1f2c33;
+  --color-muted: #6b7a82;
+  --color-border: #d8e8f0;
   --max-width: 980px;
   --radius: 6px;
 }
@@ -72,9 +73,9 @@ a:hover { text-decoration: underline; }
   display: inline-block;
   margin-left: 8px;
   padding: 2px 8px;
-  background: #fff3cd;
-  color: #856404;
-  border: 1px solid #ffe69c;
+  background: var(--color-accent-soft);
+  color: var(--color-primary-dark);
+  border: 1px solid #b9dcec;
   border-radius: 999px;
   font-size: 11px;
   font-weight: 700;
@@ -112,28 +113,28 @@ a:hover { text-decoration: underline; }
 
 /* ---------- 注意バー（非公式の告知） ---------- */
 .notice-bar {
-  background: #fff8e1;
-  border-bottom: 1px solid #ffe082;
-  color: #5d4500;
+  background: var(--color-accent-soft);
+  border-bottom: 1px solid #b9dcec;
+  color: var(--color-primary-dark);
   padding: 8px 0;
   font-size: 13px;
   text-align: center;
 }
-.notice-bar a { color: #8c0a20; }
+.notice-bar a { color: var(--color-primary-dark); font-weight: 600; }
 
 /* ---------- 警告段落 ---------- */
 .warning {
   margin-top: 14px;
   padding: 10px 14px;
-  background: #fdecea;
+  background: var(--color-accent-soft);
   border-left: 4px solid var(--color-primary);
-  color: #5a1010;
+  color: var(--color-primary-dark);
   border-radius: 4px;
 }
 
 /* ---------- ヒーロー ---------- */
 .hero {
-  background: linear-gradient(180deg, #fafaf5 0%, #ffffff 100%);
+  background: linear-gradient(180deg, #ebf6fc 0%, #ffffff 100%);
   border-bottom: 1px solid var(--color-border);
   padding: 64px 0 56px;
 }
@@ -275,13 +276,13 @@ a:hover { text-decoration: underline; }
 
 /* ---------- フッター ---------- */
 .site-footer {
-  background: #1c1c1c;
-  color: #d0d0c8;
+  background: #1d3a4a;
+  color: #cfe4ee;
   padding: 28px 0;
   margin-top: 40px;
   font-size: 14px;
 }
-.site-footer a { color: #ff8da1; }
+.site-footer a { color: #9fd5ee; }
 .footer-inner { text-align: center; }
 .footer-inner p { margin: 4px 0; }
 

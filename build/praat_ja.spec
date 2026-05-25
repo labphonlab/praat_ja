@@ -1,4 +1,4 @@
-# PyInstaller spec — Praat 日本語版 GUI フロントエンド
+# PyInstaller spec — 非公式Praat日本語版 (Praat JA - Unofficial)
 # 使い方: pyinstaller build/praat_ja.spec --clean
 
 import sys
@@ -12,13 +12,19 @@ PROJECT_ROOT = SPEC_DIR.parent
 is_mac = sys.platform == "darwin"
 is_win = sys.platform.startswith("win")
 
+# 必須でないファイルは存在チェックを通して datas に入れる。
+# CI 上でアイコンや LICENSE がまだ無くてもビルドが落ちないようにする。
 datas = [
     (str(PROJECT_ROOT / "scripts"), "scripts"),
-    (str(PROJECT_ROOT / "assets"), "assets"),
-    (str(PROJECT_ROOT / "LICENSE"), "."),
-    (str(PROJECT_ROOT / "COPYING.GPL"), "."),
-    (str(PROJECT_ROOT / "README.md"), "."),
 ]
+_assets_dir = PROJECT_ROOT / "assets"
+if _assets_dir.exists():
+    datas.append((str(_assets_dir), "assets"))
+
+for _extra in ("LICENSE", "COPYING.GPL", "README.md"):
+    _p = PROJECT_ROOT / _extra
+    if _p.exists():
+        datas.append((str(_p), "."))
 
 a = Analysis(
     [str(PROJECT_ROOT / "main.py")],
@@ -36,10 +42,15 @@ a = Analysis(
 )
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
+# アイコンは存在する場合のみ指定する。無ければ None を渡して OS デフォルトに任せる。
+def _icon_or_none(filename: str):
+    p = PROJECT_ROOT / "assets" / filename
+    return str(p) if p.exists() else None
+
 if is_mac:
-    icon_path = str(PROJECT_ROOT / "assets" / "icon.icns")
+    icon_path = _icon_or_none("icon.icns")
 elif is_win:
-    icon_path = str(PROJECT_ROOT / "assets" / "icon.ico")
+    icon_path = _icon_or_none("icon.ico")
 else:
     icon_path = None
 
@@ -73,10 +84,8 @@ coll = COLLECT(
 )
 
 if is_mac:
-    app = BUNDLE(
-        coll,
+    _bundle_kwargs = dict(
         name="非公式Praat日本語版.app",
-        icon=icon_path,
         bundle_identifier="org.labphonlab.praatja.unofficial",
         info_plist={
             "CFBundleShortVersionString": "1.0.0",
@@ -91,3 +100,6 @@ if is_mac:
             ),
         },
     )
+    if icon_path:
+        _bundle_kwargs["icon"] = icon_path
+    app = BUNDLE(coll, **_bundle_kwargs)
